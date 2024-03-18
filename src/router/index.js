@@ -1,29 +1,37 @@
+// /src/router/index.js
+
 import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../views/HomePage.vue'; // Update import statement
-import RegistrationPage from '@/views/RegistrationPage.vue'; // Make sure this import is correct
+import HomePage from '../views/HomePage.vue';
+import ProtectedPage from '../views/ProtectedPage.vue';
+import AdminPage from '../views/AdminPage.vue';
 import LoginPage from '../views/LoginPage.vue';
-import TestPage from '@/views/TestPage.vue'; // Import the TestPage component
+
+// Import the useTokens composable to access the user's roles
+import { useTokens } from '@/composables/useTokens.js';
+
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomePage // Use the updated variable name
+    component: HomePage
   },
   { 
-    path: '/register', 
-    name: 'register', 
-    component: RegistrationPage 
+    path: '/protected', 
+    name: 'protected', 
+    component: ProtectedPage,
+    meta: { requiresAuth: true } // Add meta field to require authentication
   },  
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminPage,
+    meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
+  },
   {
     path: '/login',
     name: 'login',
     component: LoginPage
   },
-  {
-    path: '/test', // Define a new test route
-    name: 'test',
-    component: TestPage
-  }
   // Define other routes here...
 ];
 
@@ -32,6 +40,19 @@ const router = createRouter({
   routes
 });
 
-console.log("Router configuration:", routes); // Log the route configuration
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token'); // Check if the user is authenticated
+  const { tokenDecoded } = useTokens(); // Destructure tokenDecoded from useTokens
+  const userRoles = tokenDecoded.value?.roles || []; // Get the user's roles from the decoded token
+  const isAdmin = userRoles.includes('admin'); // Check if the user has the admin role
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login'); // Redirect to login page if authentication is required but user is not authenticated
+  } else if (to.meta.requiresAdmin && (!isAuthenticated || !isAdmin)) {
+    next('/'); // Redirect to home page if admin access is required but user is not authenticated or not an admin
+  } else {
+    next(); // Proceed to the requested route
+  }
+});
 
 export default router;
