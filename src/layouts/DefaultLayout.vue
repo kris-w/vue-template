@@ -1,3 +1,5 @@
+<!-- /src/layouts/defaultLayout.vue -->
+
 <template>
   <v-app>
     <v-app-bar app color="primary">
@@ -5,10 +7,12 @@
       <v-spacer></v-spacer>
       <template v-if="isLoggedIn">
         <span ref="helloMessage" style="margin-right: 10px;">Hello, {{ username }}</span>
-        <v-btn color="accent" @click="logout">Logout</v-btn>
+        <v-btn color="accent" @click="handleLogout">Logout</v-btn>
       </template>
       <template v-else>
-        <v-btn color="error" @click="login">Login</v-btn>
+        <router-link to="/login">
+          <v-btn color="accent">Login</v-btn>
+        </router-link>
       </template>
     </v-app-bar>
 
@@ -24,12 +28,16 @@
   // Import the environment variable
   const siteName = import.meta.env.VITE_APP_SITE_NAME;
 
-  // Import useTokens composable
+  // Import useTokens and useAccounts composables
   import { useTokens } from '@/composables/useTokens.js';
+  import { useAccounts } from '@/composables/useAccounts.js';
   import { computed, onMounted } from 'vue'; 
 
   // Destructure the loggedIn state and username from useTokens
   const { tokenSet, tokenDecoded, recallTokens } = useTokens() || {};
+
+  // Destructure the logout method from useAccounts
+  const { logout } = useAccounts();
 
   onMounted(() => {
     // Call recallTokens when the component is mounted
@@ -43,12 +51,7 @@
   const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
 
   // Method to handle logout
-  function logout() {
-    // Add logout logic here
-  }
-
-  // Method to handle login
-  function login() {
-    // Add login logic here
+  function handleLogout() {
+    logout(); // Call the logout method
   }
 </script>
