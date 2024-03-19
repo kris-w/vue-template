@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import ProtectedPage from '../views/ProtectedPage.vue';
 import AdminPage from '../views/AdminPage.vue';
+import AdminAllUsersPage from '../views/AdminAllUsersPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegistrationPage from '../views/RegistrationPage.vue';
 
@@ -26,6 +27,12 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: AdminPage,
+    meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
+  },
+  {
+    path: '/admin/users',
+    name: 'adminAllUsers',
+    component: AdminAllUsersPage,
     meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
   },
   {
