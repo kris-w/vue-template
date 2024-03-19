@@ -5,6 +5,7 @@ import HomePage from '../views/HomePage.vue';
 import ProtectedPage from '../views/ProtectedPage.vue';
 import AdminPage from '../views/AdminPage.vue';
 import LoginPage from '../views/LoginPage.vue';
+import RegistrationPage from '../views/RegistrationPage.vue';
 
 // Import the useTokens composable to access the user's roles
 import { useTokens } from '@/composables/useTokens.js';
@@ -27,6 +28,11 @@ const routes = [
     component: AdminPage,
     meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegistrationPage
+  },  
   {
     path: '/login',
     name: 'login',
@@ -56,3 +62,4 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
+   
