@@ -9,8 +9,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src',
+      '@': '/src/',
     },
   },  
+  css: {
+    preprocessorOptions: {
+        scss: {
+            additionalData: `@import "@/assets/scss/global.scss";`,
+        },
+    },
+},
   base: '/', // Set your base URL here  
 })
