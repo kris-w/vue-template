@@ -14,6 +14,8 @@ console.log("Router instance:", router); // Log the router instance
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css'
 
+import '@/assets/scss/global.scss';
+
 const vuetify = createVuetify({
   components,
   directives,
