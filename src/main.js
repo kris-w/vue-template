@@ -10,13 +10,14 @@ import * as directives from 'vuetify/directives'
 
 console.log("Router instance:", router); // Log the router instance
 
+// Import Vuetify styles and Material Design Icons CSS
+import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css'
+
 const vuetify = createVuetify({
   components,
   directives,
 })
-
-// Import Vuetify styles
-import 'vuetify/dist/vuetify.min.css';
 
 const app = createApp(App);
 app.use(router);
