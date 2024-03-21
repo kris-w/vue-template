@@ -27,51 +27,54 @@
               {{ item.username }}
             </router-link>
           </template>
+          <!-- Display the Active column -->
+          <template v-slot:item.active="{ item }">
+            <v-chip :color="item.active ? 'success' : 'error'" label>{{ item.active ? 'Active' : 'Inactive' }}</v-chip>
+          </template>          
         </v-data-table>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script>
-  import { useUser } from '@/composables/useUser.js';
+<script setup>
+import { useUser } from '@/composables/useUser.js';
+import { ref, onMounted } from 'vue';
 
-  export default {
-    data() {
-      return {
-        headers: [
-          { text: 'Username', value: 'username' },
-          { text: 'Email', value: 'email' },
-          { text: 'Role', value: 'role' },
-          { text: 'Actions', value: 'action', sortable: false }
-        ],
-        users: [],
-        loading: false,
-        loadingText: 'Loading...',
-        search: ''
-      };
-    },
-    mounted() {
-      this.getUsers();
-    },
-    methods: {
-      async getUsers() {
-        try {
-          this.loading = true;
-          const { getAllUsers } = useUser(); // Destructure getAllUsers from useUser
-          const users = await getAllUsers(); // Use getAllUsers function
-          this.users = users;
-        } catch (error) {
-          console.error('Error fetching users:', error);
-        } finally {
-          this.loading = false;
-        }
-      },
-      deleteUser(user) {
-        // Implement delete functionality
-      }
-    }
-  };
+const headers = [
+  { title: 'Username', key: 'username' },
+  { title: 'Email', key: 'email' },
+  { title: 'Role', key: 'role' },
+  { title: 'Active', key: 'active' }, // Added Active column  
+  { title: 'Actions', key: 'action', sortable: false }
+];
+
+// Define reactive variables
+const users = ref([]);
+const loading = ref(false);
+const loadingText = ref('Loading...');
+const search = ref('');
+
+// Import and use the useUser composable
+const { getAllUsers } = useUser();
+
+// Fetch users when component is mounted
+onMounted(async () => {
+  try {
+    loading.value = true;
+    const usersData = await getAllUsers();
+    users.value = usersData;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  } finally {
+    loading.value = false;
+  }
+});
+
+// Function to delete a user
+const deleteUser = (user) => {
+  // Implement delete functionality
+};
 </script>
 
 <style scoped>
