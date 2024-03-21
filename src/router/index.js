@@ -5,6 +5,7 @@ import HomePage from '../views/HomePage.vue';
 import ProtectedPage from '../views/ProtectedPage.vue';
 import AdminPage from '../views/AdminPage.vue';
 import AdminAllUsersPage from '../views/AdminAllUsersPage.vue';
+import AdminEditUserPage from '../views/AdminEditUserPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegistrationPage from '../views/RegistrationPage.vue';
 
@@ -35,6 +36,12 @@ const routes = [
     component: AdminAllUsersPage,
     meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
   },
+  {
+    path: '/admin/users/:userId',
+    name: 'UserProfile',
+    component: AdminEditUserPage,
+    meta: { requiresAuth: true, requiresAdmin: true } // Add meta fields for authentication and admin role
+  },  
   {
     path: '/register',
     name: 'register',
