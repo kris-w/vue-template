@@ -3,7 +3,9 @@
 <template>
   <v-app>
     <v-app-bar app color="primary">
-      <v-toolbar-title>{{ siteName }}</v-toolbar-title>
+      <router-link :to="{ name: 'home' }" class="site-title">
+        <v-toolbar-title>{{ siteName }}</v-toolbar-title>
+      </router-link>  
       <v-spacer></v-spacer>
       <template v-if="account.isLoggedIn">
         <span ref="helloMessage" class="navbar-item">Hello, {{ account.username }}</span>
