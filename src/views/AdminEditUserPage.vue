@@ -9,7 +9,8 @@
                 <v-text-field v-model="user.username" label="Username"></v-text-field>
                 <v-text-field v-model="user.email" label="Email"></v-text-field>
                 <v-text-field v-model="password" label="Password" type="password"></v-text-field>
-                <v-text-field v-model="user.roles" label="Roles" readonly></v-text-field>
+                <!-- Editable roles -->
+                <v-select v-model="user.roles" label="Roles" :items="roleOptions" multiple chips></v-select>
                 <v-select v-model="user.active" label="Active" :items="['true', 'false']"></v-select>
                 <v-btn type="submit" color="primary">Save Changes</v-btn>
               </v-form>
@@ -35,6 +36,7 @@
   const user = ref(null);
   const notification = ref(null);
   const password = ref('');
+  const roleOptions = ref(['user', 'admin']);
   
   // Fetch user data when component is mounted
   onMounted(async () => {
@@ -62,7 +64,7 @@
         _id: user.value._id, // Include the _id field        
         username: user.value.username,
         email: user.value.email,
-        roles: user.value.roles,
+        roles: user.value.roles.join(','), // Convert roles array to comma-separated string
         active: user.value.active
       };
   
