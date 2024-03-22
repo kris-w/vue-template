@@ -51,8 +51,8 @@
     account.logout(); // Call the logout method
   }
 
-// Nav aid
-function route(page) {
-  router.push({ name: page });
-}  
+  // Nav aid
+  function route(page) {
+    router.push({ name: page });
+  }  
 </script>

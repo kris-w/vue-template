@@ -1,26 +1,49 @@
-// /src/views/AdminPage.vue
-
 <template>
-  <div v-if="isLoggedIn && isAdmin">
-    <h1>Welcome to the Admin Page</h1>
-    <p>This is a placeholder component for the Admin page.</p>
-  </div>
-  <div v-else>
-    <p>You do not have permission to access this page.</p>
-  </div>
+  <v-container>
+    <div v-if="account.isLoggedIn && account.isAdmin">
+      <v-row>
+        <v-col cols="4">
+          <v-card>
+            <v-card-title>User accounts</v-card-title>
+            <v-card-text>
+              <v-btn color="primary" @click="route('adminAllUsers')">Manage Users</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <p>TEST</p>
+        </v-col>
+        <v-col cols="4">
+          <p>TEST</p>
+        </v-col>
+      </v-row>
+    </div>
+    <div v-else>
+      <p>You do not have permission to access this page.</p>
+    </div>
+  </v-container>
 </template>
 
 <script setup>
-  import { useTokens } from '@/composables/useTokens.js';
+  import { useAccounts } from '@/composables/useAccounts.js';
   import { computed } from 'vue';
+  import { useRouter } from 'vue-router';
 
-  const { tokenSet, tokenDecoded } = useTokens();
+  //check for admin user
+  const account = useAccounts();
+  const router = useRouter();
 
-  const isLoggedIn = computed(() => tokenSet.value);
-  const isAdmin = computed(() => {
-    const userRoles = tokenDecoded.value?.roles || []; // Assuming roles are stored in the token's decoded payload
-    return userRoles.includes('admin'); // Check if the user has the "admin" role
+  // Setup hook for meta
+  import { useMeta } from 'vue-meta';
+  useMeta({
+    title: 'Administration > Main',
+    htmlAttrs: { lang: 'en', amp: true }
   });
+
+  // Nav aid
+  function route(page) {
+    router.push({ name: page });
+  }  
 </script>
 
 <style scoped>

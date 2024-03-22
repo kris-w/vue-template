@@ -39,6 +39,13 @@
   const roleOptions = ref(['user', 'admin']);
   const selectedRoles = ref([]);
   
+  // Setup hook for meta
+  import { useMeta } from 'vue-meta';
+  useMeta({
+    title: 'Administration > Edit User',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
+
   // Fetch user data when component is mounted
   onMounted(async () => {
     try {
