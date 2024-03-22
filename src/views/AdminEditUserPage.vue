@@ -10,7 +10,7 @@
                 <v-text-field v-model="user.email" label="Email"></v-text-field>
                 <v-text-field v-model="password" label="Password" type="password"></v-text-field>
                 <!-- Editable roles -->
-                <v-select v-model="user.roles" label="Roles" :items="roleOptions" multiple chips></v-select>
+                <v-select v-model="selectedRoles" label="Roles" :items="roleOptions" multiple chips></v-select>
                 <v-select v-model="user.active" label="Active" :items="['true', 'false']"></v-select>
                 <v-btn type="submit" color="primary">Save Changes</v-btn>
               </v-form>
@@ -37,6 +37,7 @@
   const notification = ref(null);
   const password = ref('');
   const roleOptions = ref(['user', 'admin']);
+  const selectedRoles = ref([]);
   
   // Fetch user data when component is mounted
   onMounted(async () => {
@@ -52,6 +53,8 @@
     try {
       const response = await getUserById(userId.value);
       user.value = response;
+      // Set selected roles based on user's roles
+      selectedRoles.value = user.value.roles;
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -64,7 +67,7 @@
         _id: user.value._id, // Include the _id field        
         username: user.value.username,
         email: user.value.email,
-        roles: user.value.roles.join(','), // Convert roles array to comma-separated string
+        roles: selectedRoles.value, // Send selected roles as an array
         active: user.value.active
       };
   
