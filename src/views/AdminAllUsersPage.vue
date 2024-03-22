@@ -42,43 +42,50 @@
 </template>
 
 <script setup>
-import { useUser } from '@/composables/useUser.js';
-import { ref, onMounted } from 'vue';
+  import { useUser } from '@/composables/useUser.js';
+  import { ref, onMounted } from 'vue';
 
-const headers = [
-  { title: 'Username', key: 'username' },
-  { title: 'Email', key: 'email' },
-  { title: 'Roles', key: 'roles' }, // Changed title and key for Roles column
-  { title: 'Active', key: 'active' },
-  { title: 'Actions', key: 'action', sortable: false }
-];
+  const headers = [
+    { title: 'Username', key: 'username' },
+    { title: 'Email', key: 'email' },
+    { title: 'Roles', key: 'roles' }, // Changed title and key for Roles column
+    { title: 'Active', key: 'active' },
+    { title: 'Actions', key: 'action', sortable: false }
+  ];
 
-// Define reactive variables
-const users = ref([]);
-const loading = ref(false);
-const loadingText = ref('Loading...');
-const search = ref('');
+  // Define reactive variables
+  const users = ref([]);
+  const loading = ref(false);
+  const loadingText = ref('Loading...');
+  const search = ref('');
 
-// Import and use the useUser composable
-const { getAllUsers } = useUser();
+  // Import and use the useUser composable
+  const { getAllUsers } = useUser();
 
-// Fetch users when component is mounted
-onMounted(async () => {
-  try {
-    loading.value = true;
-    const usersData = await getAllUsers();
-    users.value = usersData;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  } finally {
-    loading.value = false;
-  }
-});
+  // Setup hook for meta
+  import { useMeta } from 'vue-meta';
+  useMeta({
+    title: 'Administration > All Users',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
 
-// Function to delete a user
-const deleteUser = (user) => {
-  // Implement delete functionality
-};
+  // Fetch users when component is mounted
+  onMounted(async () => {
+    try {
+      loading.value = true;
+      const usersData = await getAllUsers();
+      users.value = usersData;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      loading.value = false;
+    }
+  });
+
+  // Function to delete a user
+  const deleteUser = (user) => {
+    // Implement delete functionality
+  };
 </script>
 
 <style scoped>

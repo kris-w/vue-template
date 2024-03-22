@@ -36,6 +36,13 @@
   const notification = ref(null);
   const password = ref('');
   
+  // Setup hook for meta
+  import { useMeta } from 'vue-meta';
+  useMeta({
+    title: 'Administration > Edit User',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
+
   // Fetch user data when component is mounted
   onMounted(async () => {
     try {
