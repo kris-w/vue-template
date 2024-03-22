@@ -21,7 +21,7 @@
   </template>
   
   <script setup>
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import { useUser } from '@/composables/useUser.js';
     
@@ -32,15 +32,20 @@
     const userId = ref(route.params.userId); // Assuming userId is passed as a route parameter
     const user = ref(null);
     const notification = ref(null);
-    
-    // Fetch user data when the component is mounted
-    getUserData();
-    
+
+    // Fetch user data when component is mounted
+    onMounted(async () => {
+        try {
+            getUserData();
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        } 
+    });    
+
+
     async function getUserData() {
         try {
-            console.log("user " + userId.value);
             const response = await getUserById(userId.value);
-            console.log("outside", response);
             user.value = response;
         } catch (error) {
             console.error('Error fetching user data:', error);

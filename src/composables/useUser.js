@@ -25,13 +25,11 @@ export function useUser() {
     async function getUserById(userId) {
       try {
         const token = localStorage.getItem('token');
-        console.log(token);
         const response = await axios.get(`${apiUrl}/api/admin/users/${userId}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           });
-        console.log("inside ",response.data);  
         return response.data; // Return user data
       } catch (error) {
         console.error('Error fetching user by ID:', error);
