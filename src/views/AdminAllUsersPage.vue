@@ -30,7 +30,11 @@
           <!-- Display the Active column -->
           <template v-slot:item.active="{ item }">
             <v-chip :color="item.active ? 'success' : 'error'" label>{{ item.active ? 'Active' : 'Inactive' }}</v-chip>
-          </template>          
+          </template>  
+          <!-- Display the Roles column -->
+          <template v-slot:item.roles="{ item }">
+            {{ item.roles.join(', ') }}
+          </template>        
         </v-data-table>
       </v-col>
     </v-row>
@@ -44,8 +48,8 @@ import { ref, onMounted } from 'vue';
 const headers = [
   { title: 'Username', key: 'username' },
   { title: 'Email', key: 'email' },
-  { title: 'Role', key: 'role' },
-  { title: 'Active', key: 'active' }, // Added Active column  
+  { title: 'Roles', key: 'roles' }, // Changed title and key for Roles column
+  { title: 'Active', key: 'active' },
   { title: 'Actions', key: 'action', sortable: false }
 ];
 
