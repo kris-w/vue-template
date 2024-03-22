@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import configuredAxios from "@/utils/configuredAxios.js";
 import { useTokens } from '@/composables/useTokens.js'; // Import useTokens composable
 
@@ -42,6 +42,16 @@ export function useAccounts() {
             password2: null,
         };
     }
+
+    // Computed property to check if the user is logged in
+    const isLoggedIn = computed(() => tokenSet.value);
+
+    // Computed property to get the username if the user is logged in
+    const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username.replace(/['"]+/g, '') : null);
+
+    function isAdmin(userRoles) {
+        return userRoles.includes('admin');
+      }
 
     async function register() {
         console.log('Registering new account with data:', newUser.value);
@@ -102,5 +112,8 @@ export function useAccounts() {
         logout,
         sendPasswordResetRequest,
         attemptPasswordReset,
+        isAdmin,
+        isLoggedIn,
+        username,
     };
 }

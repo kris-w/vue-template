@@ -5,14 +5,15 @@
     <v-app-bar app color="primary">
       <v-toolbar-title>{{ siteName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <template v-if="isLoggedIn">
-        <span ref="helloMessage" style="margin-right: 10px;">Hello, {{ username }}</span>
-        <v-btn color="accent" @click="handleLogout">Logout</v-btn>
+      <template v-if="account.isLoggedIn">
+        <span ref="helloMessage" class="navbar-item">Hello, {{ account.username }}</span>
+        <!-- Conditionally render the "admin" button if the user is an admin -->
+          <v-btn class="navbar-item" v-if="account.isAdmin" @click="route('admin')"  append-icon="mdi-shield-crown" variant="tonal">Admin</v-btn>
+        <v-btn class="navbar-item" @click="handleLogout" append-icon="mdi-logout" variant="tonal">Logout</v-btn>
+        
       </template>
       <template v-else>
-        <router-link to="/login">
-          <v-btn color="accent">Login</v-btn>
-        </router-link>
+        <v-btn  @click="route('login')" append-icon="mdi-login">Login</v-btn>
       </template>
     </v-app-bar>
 
@@ -29,29 +30,29 @@
   const siteName = import.meta.env.VITE_APP_SITE_NAME;
 
   // Import useTokens and useAccounts composables
+  import { useRouter } from 'vue-router';
   import { useTokens } from '@/composables/useTokens.js';
   import { useAccounts } from '@/composables/useAccounts.js';
-  import { computed, onMounted } from 'vue'; 
+  import { onMounted } from 'vue'; 
 
   // Destructure the loggedIn state and username from useTokens
   const { tokenSet, tokenDecoded, recallTokens } = useTokens() || {};
-
-  // Destructure the logout method from useAccounts
-  const { logout } = useAccounts();
+  //check for admin user
+  const account = useAccounts();
+  const router = useRouter();
 
   onMounted(() => {
     // Call recallTokens when the component is mounted
     recallTokens();
   });
 
-  // Computed property to check if the user is logged in
-  const isLoggedIn = computed(() => tokenSet.value);
-  
-  // Computed property to get the username if the user is logged in
-  const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
-
   // Method to handle logout
   function handleLogout() {
-    logout(); // Call the logout method
+    account.logout(); // Call the logout method
   }
+
+// Nav aid
+function route(page) {
+  router.push({ name: page });
+}  
 </script>
