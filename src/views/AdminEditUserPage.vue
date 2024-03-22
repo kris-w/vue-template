@@ -36,13 +36,6 @@
   const notification = ref(null);
   const password = ref('');
   
-  // Setup hook for meta
-  import { useMeta } from 'vue-meta';
-  useMeta({
-    title: 'Administration > Edit User',
-    htmlAttrs: { lang: 'en', amp: true }
-  });
-
   // Fetch user data when component is mounted
   onMounted(async () => {
     try {
@@ -64,11 +57,22 @@
   
   async function saveChanges() {
     try {
-      // If password field is not empty, update password
+      // Prepare the data object to be sent to the server
+      const data = {
+        _id: user.value._id, // Include the _id field        
+        username: user.value.username,
+        email: user.value.email,
+        roles: user.value.roles,
+        active: user.value.active
+      };
+  
+      // If password field is not empty, include it in the data
       if (password.value.trim() !== '') {
-        user.value.password = password.value;
+        data.password = password.value;
       }
-      const response = await updateUser(user.value);
+  
+      // Send the data to the server for updating
+      const response = await updateUser(data);
       console.log('User updated:', response.data);
       notification.value = {
         type: 'success',
