@@ -47,8 +47,8 @@ export function useAccounts() {
     const isLoggedIn = computed(() => tokenSet.value);
 
     // Computed property to get the username if the user is logged in
-    const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username.replace(/['"]+/g, '') : null);
-
+    const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
+    
     function isAdmin(userRoles) {
         return userRoles.includes('admin');
       }
