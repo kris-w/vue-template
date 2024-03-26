@@ -7,10 +7,10 @@
         <v-toolbar-title>{{ siteName }}</v-toolbar-title>
       </router-link>  
       <v-spacer></v-spacer>
-      <template v-if="account.isLoggedIn">
-        <span ref="helloMessage" class="navbar-item">Hello, {{ account.username }}</span>
+      <template v-if="account.isLoggedIn.value">
+        <span ref="helloMessage" class="navbar-item">Hello, {{ account.username.value }}</span>
         <!-- Conditionally render the "admin" button if the user is an admin -->
-          <v-btn class="navbar-item" v-if="account.isAdmin" @click="route('admin')"  append-icon="mdi-shield-crown" variant="tonal">Admin</v-btn>
+          <v-btn class="navbar-item" v-if="account.isAdmin.value" @click="route('admin')"  append-icon="mdi-shield-crown" variant="tonal">Admin</v-btn>
         <v-btn class="navbar-item" @click="handleLogout" append-icon="mdi-logout" variant="tonal">Logout</v-btn>
         
       </template>
@@ -52,6 +52,7 @@
   // Method to handle logout
   function handleLogout() {
     account.logout(); // Call the logout method
+    route('login');
   }
 
   // Nav aid
