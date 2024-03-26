@@ -25,7 +25,6 @@ let resetPassword = ref({
 });
 
 export function useAccounts() {
-
     function resetNewUser() {
         newUser.value = {
             username: null,
@@ -43,15 +42,23 @@ export function useAccounts() {
         };
     }
 
-    // Computed property to check if the user is logged in
-    const isLoggedIn = computed(() => tokenSet.value);
+    const isLoggedIn = computed(() => {
+        return tokenSet.value && tokenDecoded.value && !isTokenExpired(tokenDecoded.value.exp);
+    });
+
+    // Computed property to check if the user has admin role
+    const isAdmin = computed(() => {
+        return isLoggedIn.value && tokenDecoded.value.roles && tokenDecoded.value.roles.includes('admin');
+    });
+
+    // Helper function to check if token is expired
+    function isTokenExpired(expiration) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        return expiration < currentTime;
+    }
 
     // Computed property to get the username if the user is logged in
     const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
-    
-    function isAdmin(userRoles) {
-        return userRoles.includes('admin');
-      }
 
     async function register() {
         console.log('Registering new account with data:', newUser.value);

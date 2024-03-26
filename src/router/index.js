@@ -1,5 +1,3 @@
-// /src/router/index.js
-
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import ProtectedPage from '../views/ProtectedPage.vue';
@@ -9,8 +7,8 @@ import AdminEditUserPage from '../views/AdminEditUserPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegistrationPage from '../views/RegistrationPage.vue';
 
-// Import the useTokens composable to access the user's roles
-import { useTokens } from '@/composables/useTokens.js';
+// Import the useAccounts composable to handle user authentication and authorization
+import { useAccounts } from '@/composables/useAccounts.js';
 
 const routes = [
   {
@@ -61,14 +59,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if the user is authenticated
-  const { tokenDecoded } = useTokens(); // Destructure tokenDecoded from useTokens
-  const userRoles = tokenDecoded.value?.roles || []; // Get the user's roles from the decoded token
-  const isAdmin = userRoles.includes('admin'); // Check if the user has the admin role
+  const { isLoggedIn, isAdmin } = useAccounts(); // Destructure isLoggedIn and isAdmin from useAccounts
+  const isAuthenticated = isLoggedIn.value;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login'); // Redirect to login page if authentication is required but user is not authenticated
-  } else if (to.meta.requiresAdmin && (!isAuthenticated || !isAdmin)) {
+  } else if (to.meta.requiresAdmin && (!isAuthenticated || !isAdmin.value)) {
     next('/'); // Redirect to home page if admin access is required but user is not authenticated or not an admin
   } else {
     next(); // Proceed to the requested route
@@ -76,4 +72,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-   
