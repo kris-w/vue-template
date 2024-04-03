@@ -60,6 +60,11 @@ export function useAccounts() {
     // Computed property to get the username if the user is logged in
     const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
 
+    // Function to get the email if the user is logged in
+    function getEmail() {
+        return tokenDecoded.value ? tokenDecoded.value.email : null;
+    }
+
     async function register() {
         console.log('Registering new account with data:', newUser.value);
         try {
@@ -101,12 +106,26 @@ export function useAccounts() {
     }
     
 
-    function sendPasswordResetRequest(email) {
-        // Implementation for sending password reset request
+    async function sendPasswordResetRequest(email) {
+        try {
+            const params = { email };
+            const response = await configuredAxios.post(`${apiUrl}/api/auth/password/reset/request`, params);
+            return { success: true, message: response.data.message };
+        } catch (error) {
+            console.error("Error sending password reset request:", error);
+            return { success: false, message: "Error sending password reset request. Please try again." };
+        }
     }
 
-    function attemptPasswordReset(token) {
-        // Implementation for attempting password reset
+    async function attemptPasswordReset(token, newPassword) {
+        try {
+            const params = { token, newPassword };
+            const response = await configuredAxios.post(`${apiUrl}/api/auth/password/reset`, params);
+            return { success: true, message: response.data.message };
+        } catch (error) {
+            console.error("Error attempting password reset:", error);
+            return { success: false, message: "Error resetting password. Please try again." };
+        }
     }
 
     return {
@@ -122,5 +141,6 @@ export function useAccounts() {
         isAdmin,
         isLoggedIn,
         username,
+        getEmail,
     };
 }

@@ -6,6 +6,8 @@ import AdminAllUsersPage from '../views/AdminAllUsersPage.vue';
 import AdminEditUserPage from '../views/AdminEditUserPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegistrationPage from '../views/RegistrationPage.vue';
+import PasswordResetRequestPage from '../views/PasswordResetRequestPage.vue';
+import PasswordResetPage from '../views/PasswordResetPage.vue';
 
 // Import the useAccounts composable to handle user authentication and authorization
 import { useAccounts } from '@/composables/useAccounts.js';
@@ -50,6 +52,17 @@ const routes = [
     name: 'login',
     component: LoginPage
   },
+  {
+    path: '/password/reset/request',
+    name: 'PasswordResetRequest',
+    component: PasswordResetRequestPage
+  },
+  {
+    path: '/password/reset',
+    name: 'PasswordReset',
+    component: PasswordResetPage
+  },
+  
   // Define other routes here...
 ];
 
