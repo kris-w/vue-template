@@ -21,13 +21,14 @@
   
   export default {
     setup() {
-      const { getEmail, sendPasswordResetRequest } = useAccounts();
+
+      const account = useAccounts();
       const notification = ref(null);
   
       const requestPasswordReset = () => {
-        const email = getEmail();
-        if (email) {
-          sendPasswordResetRequest(email)
+        //console.log("Email: ",account.email.value);
+        if (account.email.value) {
+          account.sendPasswordResetRequest(account.email.value)
             .then(response => {
               // Handle success or failure response
               if (response.success) {

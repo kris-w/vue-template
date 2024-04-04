@@ -46,7 +46,6 @@
   onMounted(() => {
     // Call recallTokens when the component is mounted
     recallTokens();
-    console.log(account.username);
   });
 
   // Method to handle logout

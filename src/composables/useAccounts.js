@@ -59,11 +59,7 @@ export function useAccounts() {
 
     // Computed property to get the username if the user is logged in
     const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
-
-    // Function to get the email if the user is logged in
-    function getEmail() {
-        return tokenDecoded.value ? tokenDecoded.value.email : null;
-    }
+    const email = computed(() => tokenDecoded.value ? tokenDecoded.value.email : null);    
 
     async function register() {
         console.log('Registering new account with data:', newUser.value);
@@ -106,9 +102,9 @@ export function useAccounts() {
     }
     
 
-    async function sendPasswordResetRequest(email) {
+    async function sendPasswordResetRequest(usernameOrEmail) {
         try {
-            const params = { email };
+            const params = { usernameOrEmail };
             const response = await configuredAxios.post(`${apiUrl}/api/auth/password/reset/request`, params);
             return { success: true, message: response.data.message };
         } catch (error) {
@@ -117,9 +113,9 @@ export function useAccounts() {
         }
     }
 
-    async function attemptPasswordReset(token, newPassword) {
+    async function attemptPasswordReset(resetToken, newPassword, confirmPassword) {
         try {
-            const params = { token, newPassword };
+            const params = { resetToken, newPassword, confirmPassword };
             const response = await configuredAxios.post(`${apiUrl}/api/auth/password/reset`, params);
             return { success: true, message: response.data.message };
         } catch (error) {
@@ -141,6 +137,6 @@ export function useAccounts() {
         isAdmin,
         isLoggedIn,
         username,
-        getEmail,
+        email,
     };
 }
