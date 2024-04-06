@@ -28,13 +28,12 @@
   import { useAccounts } from '@/composables/useAccounts.js';
   import { computed } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useMeta } from 'vue-meta';
 
   //check for admin user
   const account = useAccounts();
   const router = useRouter();
 
-  // Setup hook for meta
-  import { useMeta } from 'vue-meta';
   useMeta({
     title: 'Administration > Main',
     htmlAttrs: { lang: 'en', amp: true }

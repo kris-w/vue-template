@@ -24,56 +24,51 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from 'vue';
 import { useAccounts } from '@/composables/useAccounts.js';
 import { useRouter } from 'vue-router';
 
-export default {
-  setup() {
-    const { isLoggedIn, email, sendPasswordResetRequest } = useAccounts();
-    const router = useRouter();
-    const notification = ref({ show: false, type: '', message: '' });
-    const usernameOrEmail = ref(isLoggedIn.value ? email.value : '');
-    
-    // Rules for the username or email field
-    const usernameOrEmailRules = computed(() => {
-      return [
-        v => !!v || 'Username or Email is required',
-      ];
-    });
+const { isLoggedIn, email, sendPasswordResetRequest } = useAccounts();
+const router = useRouter();
+const notification = ref({ show: false, type: '', message: '' });
+const usernameOrEmail = ref(isLoggedIn.value ? email.value : '');
+import { useMeta } from 'vue-meta';
 
-    const requestPasswordReset = async () => {
-      try {
-        const response = await sendPasswordResetRequest(usernameOrEmail.value);
-        if (response.success) {
-          notification.value = {
-            show: true,
-            type: 'success',
-            message: response.message
-          };
-        } else {
-          notification.value = {
-            show: true,
-            type: 'error',
-            message: response.message
-          };
-        }
-      } catch (error) {
-        console.error('Error requesting password reset:', error);
-        notification.value = {
-          show: true,
-          type: 'error',
-          message: 'An error occurred while processing your request. Please try again later.'
-        };
-      }
-    };
+useMeta({
+    title: 'Request a password reset',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
 
-    return {
-      usernameOrEmail,
-      usernameOrEmailRules,
-      notification,
-      requestPasswordReset
+// Rules for the username or email field
+const usernameOrEmailRules = computed(() => {
+  return [
+    v => !!v || 'Username or Email is required',
+  ];
+});
+
+const requestPasswordReset = async () => {
+  try {
+    const response = await sendPasswordResetRequest(usernameOrEmail.value);
+    if (response.success) {
+      notification.value = {
+        show: true,
+        type: 'success',
+        message: response.message
+      };
+    } else {
+      notification.value = {
+        show: true,
+        type: 'error',
+        message: response.message
+      };
+    }
+  } catch (error) {
+    console.error('Error requesting password reset:', error);
+    notification.value = {
+      show: true,
+      type: 'error',
+      message: 'An error occurred while processing your request. Please try again later.'
     };
   }
 };

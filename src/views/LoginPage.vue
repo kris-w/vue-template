@@ -23,6 +23,7 @@ import { ref } from 'vue';
 import { useAccounts } from '@/composables/useAccounts.js';
 import { useTokens } from '@/composables/useTokens.js';
 import { useRouter } from 'vue-router';
+import { useMeta } from 'vue-meta';
 
 const username = ref(null);
 const password = ref(null);
@@ -30,6 +31,11 @@ const { login } = useAccounts();
 const { setTokens } = useTokens();
 const router = useRouter();
 const notification = ref(null);
+
+useMeta({
+    title: 'Login',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
 
 const doLogin = () => {
   login(username.value, password.value)

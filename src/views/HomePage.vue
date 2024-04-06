@@ -6,7 +6,15 @@
 </template>
 
 <script setup>
+  import { useMeta } from 'vue-meta';
+
+  useMeta({
+      title: 'Home',
+      htmlAttrs: { lang: 'en', amp: true }
+    });
+
 </script>
+
 
 <style scoped>
 /* Add any scoped styles here */

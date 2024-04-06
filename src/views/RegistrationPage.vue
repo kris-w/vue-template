@@ -22,8 +22,8 @@
   
   <script setup>
   //Plugins
-  
   import { useRouter, useRoute } from 'vue-router'
+  import { useMeta } from 'vue-meta';
 
   //Components
 
@@ -31,6 +31,11 @@
   import { useAccounts } from '@/composables/useAccounts.js'
   const { register, resetNewUser, newUser } = useAccounts()
   const router = useRouter()
+
+  useMeta({
+    title: 'Register',
+    htmlAttrs: { lang: 'en', amp: true }
+  });
 
   function createNewAccount() {
     register().then((response) => {
