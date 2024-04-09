@@ -12,11 +12,17 @@
                 <v-text-field v-model="newUser.password2" label="Confirm Password" type="password"></v-text-field>
                 <v-btn type="submit" color="primary">Register</v-btn>
               </v-form>
-              <v-alert v-if="notification" :type="notification.type">{{ notification.message }}</v-alert>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
+      <v-snackbar
+      v-model="notification.show"
+      :timeout="5000"
+      :color="notification.type === 'success' ? 'success' : 'error'"
+    >
+      {{ notification.message }}
+    </v-snackbar>
     </v-container>
   </template>
   
@@ -24,6 +30,7 @@
   //Plugins
   import { useRouter, useRoute } from 'vue-router'
   import { useMeta } from 'vue-meta';
+  import { useNotification } from '@/composables/useNotifications.js';
 
   //Components
 
@@ -31,6 +38,7 @@
   import { useAccounts } from '@/composables/useAccounts.js'
   const { register, resetNewUser, newUser } = useAccounts()
   const router = useRouter()
+  const { notification, showNotification } = useNotification();
 
   useMeta({
     title: 'Register',
@@ -40,23 +48,15 @@
   function createNewAccount() {
     register().then((response) => {
       resetNewUser();
-      console.log('response', response)
-
       if (response.success) {
         router.push({ name: 'home' });
       }
       else{
-        notification.value = {
-            type: 'error',
-            message: 'Registration unsuccessful. Please try again.'
-          };
+        showNotification('error',response.message);
       }
     }).catch((error) => {
       console.log("Error identified", error);
-      notification.value = {
-          type: 'error',
-          message: 'An error occurred during registration. Please try again later.'
-        };
+      showNotification('error','An error occurred during registration. Please try again later.');
     });
 
   }

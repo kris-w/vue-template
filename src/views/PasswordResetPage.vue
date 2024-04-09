@@ -29,9 +29,10 @@ import { ref, onMounted } from 'vue';
 import { useAccounts } from '@/composables/useAccounts.js';
 import { useRoute } from 'vue-router'; // Import useRoute from vue-router
 import { useMeta } from 'vue-meta';
+import { useNotification } from '@/composables/useNotifications.js';
 
 const { attemptPasswordReset } = useAccounts();
-const notification = ref({ show: false, type: '', message: '' });
+const { notification, showNotification } = useNotification();
 const resetData = ref({
   resetToken: null, // Initialize resetToken
   newPassword: null,
@@ -51,8 +52,8 @@ onMounted(() => {
     resetData.value.resetToken = token; // Assign reset token to resetData object
   } else {
     // Handle case when reset token is not provided in the URL
+    showNotification('error','Reset token not found');
     console.error('Reset token not found in the URL');
-    // You may want to redirect the user to an error page or handle it differently
   }
 });
 
@@ -63,44 +64,23 @@ const resetPassword = () => {
       if (resetData.value.newPassword === resetData.value.confirmPassword) {
       attemptPasswordReset(resetData.value.resetToken, resetData.value.newPassword, resetData.value.confirmPassword)
           .then(response => {
-          // Handle success or failure response
-          if (response.success) {
-              notification.value = {
-              show: true,                    
-              type: 'success',
-              message: 'Password reset successfully.'
-              };
-          } else {
-              notification.value = {
-              show: true, 
-              type: 'error',
-              message: 'Failed to reset password. Please try again.'
-              };
-          }
+            if (response.success) {
+              showNotification('success',response.message);
+            } else {
+              showNotification('error',response.message);
+            }
           })
           .catch(error => {
-          console.error('Error resetting password:', error);
-          notification.value = {
-              show: true, 
-              type: 'error',
-              message: 'An error occurred while resetting your password. Please try again later.'
-          };
+            console.error('Error resetting password:', error);
+            showNotification('error','An error occurred while resetting your password. Please try again later.');
           });
       } else {
-      // If passwords do not match, show an error message
-      notification.value = {
-          show: true, 
-          type: 'error',
-          message: 'Passwords do not match. Please make sure both passwords are identical.'
-      };
+        // If passwords do not match, show an error message\
+        showNotification('error','Passwords do not match. Please make sure both passwords are identical.');
       }
   } else {
       // If newPassword or confirmPassword is empty, show an error message
-      notification.value = {
-        show: true, 
-        type: 'error',
-        message: 'Please enter both new password and confirm password.'
-      };
+      showNotification('error','Please enter both new password and confirm password.');
   }
 };
 </script>

@@ -10,11 +10,17 @@
               <v-text-field v-model="password" label="Password" type="password"></v-text-field>
               <v-btn type="submit" color="primary">Login</v-btn>
             </v-form>
-            <v-alert v-if="notification" :type="notification.type">{{ notification.message }}</v-alert>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="notification.show"
+      :timeout="5000"
+      :color="notification.type === 'success' ? 'success' : 'error'"
+    >
+      {{ notification.message }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -24,13 +30,14 @@ import { useAccounts } from '@/composables/useAccounts.js';
 import { useTokens } from '@/composables/useTokens.js';
 import { useRouter } from 'vue-router';
 import { useMeta } from 'vue-meta';
+import { useNotification } from '@/composables/useNotifications.js';
 
 const username = ref(null);
 const password = ref(null);
 const { login } = useAccounts();
 const { setTokens } = useTokens();
 const router = useRouter();
-const notification = ref(null);
+const { notification, showNotification } = useNotification();
 
 useMeta({
     title: 'Login',
@@ -46,18 +53,12 @@ const doLogin = () => {
         router.push({ name: 'home' });
       } else {
         // Handle login failure
-        notification.value = {
-          type: 'error',
-          message: 'Login unsuccessful. Please try again.'
-        };
+        showNotification('error',response.message);
       }
     })
     .catch(error => {
       console.error('Login error:', error);
-      notification.value = {
-        type: 'error',
-        message: 'An error occurred during login. Please try again later.'
-      };
+      showNotification('error','An error occurred during login. Please try again later.');
     });
 };
 </script>

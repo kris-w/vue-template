@@ -28,12 +28,13 @@
 import { ref, computed } from 'vue';
 import { useAccounts } from '@/composables/useAccounts.js';
 import { useRouter } from 'vue-router';
+import { useNotification } from '@/composables/useNotifications.js';
+import { useMeta } from 'vue-meta';
 
 const { isLoggedIn, email, sendPasswordResetRequest } = useAccounts();
 const router = useRouter();
-const notification = ref({ show: false, type: '', message: '' });
+const { notification, showNotification } = useNotification();
 const usernameOrEmail = ref(isLoggedIn.value ? email.value : '');
-import { useMeta } from 'vue-meta';
 
 useMeta({
     title: 'Request a password reset',
@@ -51,25 +52,13 @@ const requestPasswordReset = async () => {
   try {
     const response = await sendPasswordResetRequest(usernameOrEmail.value);
     if (response.success) {
-      notification.value = {
-        show: true,
-        type: 'success',
-        message: response.message
-      };
+      showNotification('success',response.message);
     } else {
-      notification.value = {
-        show: true,
-        type: 'error',
-        message: response.message
-      };
+      showNotification('error',response.message);
     }
   } catch (error) {
     console.error('Error requesting password reset:', error);
-    notification.value = {
-      show: true,
-      type: 'error',
-      message: 'An error occurred while processing your request. Please try again later.'
-    };
+    showNotification('error','An error occurred while processing your request. Please try again later.');
   }
 };
 </script>
