@@ -69,7 +69,8 @@ export function useAccounts() {
             return { success: true, message: "Account created successfully" };
         } catch (error) {
             console.log("Error", error);
-            return { success: false, message: "Error creating your account. Check your username and passwords and try again." };
+            //return { success: false, message: "Error creating your account. Check your username and passwords and try again." };
+            return { success: false, message: error.response.data.message };
         }
     }
 

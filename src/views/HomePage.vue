@@ -12,7 +12,6 @@
       title: 'Home',
       htmlAttrs: { lang: 'en', amp: true }
     });
-
 </script>
 
 
