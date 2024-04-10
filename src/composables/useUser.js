@@ -42,7 +42,6 @@ export function useUser() {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.put(`${apiUrl}/api/admin/users/${userData._id}`, userData, {
-
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
