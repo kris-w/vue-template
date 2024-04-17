@@ -13,7 +13,7 @@ export function useTokens() {
 
     //WHen the page reloads, try to get the token
     function recallTokens() {
-        console.log("Recalling tokens");
+        //console.log("Recalling tokens");
         try {
             var t = sessionStorage.getItem('token') || localStorage.getItem('token');
             var tD = sessionStorage.getItem('tokenDecoded') || localStorage.getItem('tokenDecoded');
@@ -21,8 +21,8 @@ export function useTokens() {
                 token.value = t;
                 tokenDecoded.value = JSON.parse(tD);
                 tokenSet.value = true;
-                console.log('Token recalled from sessionStorage:', token.value);
-                console.log('Decoded token recalled from sessionStorage:', tokenDecoded.value);
+                //console.log('Token recalled from sessionStorage:', token.value);
+                //console.log('Decoded token recalled from sessionStorage:', tokenDecoded.value);
             }
         } catch (error) {
             console.error('Error recalling tokens:', error);
@@ -32,8 +32,8 @@ export function useTokens() {
     }
 
     function setTokens(t, tD) {
-        console.log("Setting token:", t);
-        console.log("Setting decoded token:", tD);        
+        //console.log("Setting token:", t);
+        //console.log("Setting decoded token:", tD);        
         sessionStorage.setItem('token', t);
         sessionStorage.setItem('tokenDecoded', JSON.stringify(tD));
         localStorage.setItem('token', t); // Store in local storage as well

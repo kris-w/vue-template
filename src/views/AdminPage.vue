@@ -11,10 +11,10 @@
           </v-card>
         </v-col>
         <v-col cols="4">
-          <p>TEST</p>
+          <p>Your admin feature 2...</p>
         </v-col>
         <v-col cols="4">
-          <p>TEST</p>
+          <p>Your admin feature 3...</p>
         </v-col>
       </v-row>
     </div>
