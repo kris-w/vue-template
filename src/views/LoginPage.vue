@@ -10,6 +10,8 @@
               <v-text-field v-model="password" label="Password" type="password"></v-text-field>
               <v-btn type="submit" color="primary">Login</v-btn>
             </v-form>
+            <v-divider class="mt-4"></v-divider>
+            <p class="mt-4">Don't have an account yet? <router-link :to="{ name: 'register' }">Register here</router-link>.</p>
           </v-card-text>
         </v-card>
       </v-col>

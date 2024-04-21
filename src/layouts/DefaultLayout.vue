@@ -5,6 +5,7 @@
   <v-navigation-drawer v-model="drawer" app>
       <v-list>
         <v-list-item @click="route('home')"><v-list-item-title>Home</v-list-item-title></v-list-item>
+        <v-list-item v-if="!account.isLoggedIn.value" @click="route('register')"><v-list-item-title>Register</v-list-item-title></v-list-item>
         <v-list-item  v-if="account.isLoggedIn.value" @click="route('protected')"><v-list-item-title>Protected</v-list-item-title></v-list-item>        
         <v-list-item  v-if="account.isAdmin.value" @click="route('admin')"><v-list-item-title>Admin</v-list-item-title></v-list-item>
         <v-divider></v-divider>
