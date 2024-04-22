@@ -49,10 +49,13 @@ useMeta({
 const doLogin = () => {
   login(username.value, password.value)
     .then(response => {
-      console.log('Login response:', response); // Log the entire response object TAKE OUT
       if (response.success) {
         setTokens(response.payload.token, response.payload.tokenDecoded);
-        router.push({ name: 'home' });
+        showNotification('success',"Successfully logged in, redirecting...");
+        // Delay the redirect by 2.5 seconds
+        setTimeout(() => {
+          router.push({ name: 'home' });
+        }, 2500);
       } else {
         // Handle login failure
         showNotification('error',response.message);
