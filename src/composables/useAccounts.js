@@ -60,6 +60,7 @@ export function useAccounts() {
     // Computed property to get the username if the user is logged in
     const username = computed(() => tokenDecoded.value ? tokenDecoded.value.username : null);
     const email = computed(() => tokenDecoded.value ? tokenDecoded.value.email : null);    
+    const userId = computed(() => tokenDecoded.value ? tokenDecoded.value.id : null); 
 
     async function register() {
         console.log('Registering new account with data:', newUser.value);
@@ -139,5 +140,6 @@ export function useAccounts() {
         isLoggedIn,
         username,
         email,
+        userId,
     };
 }

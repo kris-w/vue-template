@@ -52,11 +52,28 @@ export function useUser() {
         throw new Error('Failed to update user'); // Throw error if request fails
       }
     }
+
+    async function deleteUser(userId) {
+      // Function to delete user by ID
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.delete(`${apiUrl}/api/admin/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        return { success: true, message: response.data.message };
+      } catch (error) {
+        return { success: false, message: 'Failed to delete user' };
+        throw new Error('Failed to delete user'); // Throw error if request fails
+      }
+  }
   
     // Return functions to be used in components
     return {
       getAllUsers,
       getUserById,
-      updateUser
+      updateUser,
+      deleteUser
     };
   }
