@@ -97,6 +97,7 @@ export function useAccounts() {
             tokenSet.value = false; // <- Use tokenSet from useTokens
             token.value = null; // <- Define token here
             tokenDecoded.value = null; // <- You may not need to clear this here
+            isLoggedIn.value = false; // Assuming isLoggedIn is defined here
         } catch (error) {
             console.error('Error logging out:', error);
             // Handle logout error
